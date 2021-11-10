@@ -3,10 +3,14 @@ package example.item5;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
 /*
 *   아이템 5. 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라.
 *
 *   의존 객체 주입이 클래스의 유연성, 재사용성, 테스트 용이성을 개선해준다.
+*   의존 객체가 변경될 일이 없기 때문에 여러 클라이언트가 의존 객체들을 안심하고 공유할 수 있다.
 *   하지만 이런 의존 객체 주입은 코드를 어지럽게 만들 수 있다.
 *   의존 객체 주입 프레임워크인 스프링의 도움을 받아 어질러짐을 해소할 수 있다.
 *
@@ -14,17 +18,26 @@ import org.junit.jupiter.api.Test;
 public class Item5 {
     @Test
     public void test() {
-        SpellChecker oxfordSpellChecker = new SpellChecker(new OxfordDictionary());
-        SpellChecker cambridgeSpellChecker = new SpellChecker(new CambridgeDictionary());
+        OxfordDictionary oxford = new OxfordDictionary();
+        CambridgeDictionary cambridge = new CambridgeDictionary();
+
+        SpellChecker oxfordSpellChecker = new SpellChecker(oxford);
+        SpellChecker cambridgeSpellChecker = new SpellChecker(cambridge);
 
         Dictionary oxfordDictionary = oxfordSpellChecker.getDictionary();
         Dictionary cambridgeDictionary = cambridgeSpellChecker.getDictionary();
 
-        Assertions.assertEquals(oxfordDictionary.getName(), "OxfordDictionary"); // Test Success
-        Assertions.assertEquals(cambridgeDictionary.getName(), "CambridgeDictionary"); // Test Success
+        assertEquals(oxfordDictionary.getName(), "OxfordDictionary"); // Test Success
+        assertEquals(cambridgeDictionary.getName(), "CambridgeDictionary"); // Test Success
+
+        SpellChecker oxfordSpellChecker2 = new SpellChecker(oxford);
+        assertSame(oxfordSpellChecker.getDictionary(), oxfordSpellChecker2.getDictionary()); // Test Success
     }
 }
 
+/*
+*   private final 로 만들어 의존 객체들의 불변을 보장한다.
+*/
 class SpellChecker {
     private final Dictionary dictionary;
 
