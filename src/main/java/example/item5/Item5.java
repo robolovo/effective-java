@@ -18,11 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 public class Item5 {
     @Test
     public void test() {
-        OxfordDictionary oxford = new OxfordDictionary();
-        CambridgeDictionary cambridge = new CambridgeDictionary();
+        OxfordDictionary oxford = new OxfordDictionary(); // 객체를 생성한 후에
+        CambridgeDictionary cambridge = new CambridgeDictionary(); // 객체를 생성한 후에
 
-        SpellChecker oxfordSpellChecker = new SpellChecker(oxford);
-        SpellChecker cambridgeSpellChecker = new SpellChecker(cambridge);
+        SpellChecker oxfordSpellChecker = new SpellChecker(oxford); // 클라이언트 측에서 의존 객체를 주입한다.
+        SpellChecker cambridgeSpellChecker = new SpellChecker(cambridge); // 클라이언트 측에서 의존 객체를 주입한다.
 
         Dictionary oxfordDictionary = oxfordSpellChecker.getDictionary();
         Dictionary cambridgeDictionary = cambridgeSpellChecker.getDictionary();
