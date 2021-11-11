@@ -78,7 +78,7 @@ public class Item7 {
     /*
     *   스프링에는 3가지 주요 유형의 참조 방식이 존재한다.
     *   1. Strong Reference(강한 참조) -> 일반적인 참조 방식이다. GC의 대상이 되지 않는다.
-    *   2. Soft Reference(부드러운 참조) -> 메모리가 부족할 경우에 GC의 대상이 된다.
+    *   2. Soft Reference(부드러운 참조) -> JVM의 메모리가 부족할 경우에만 GC의 대상이 되고 부족하지 않다면 굳이 제거하지 않는다.
     *   3. Weak Reference(약한 참) -> GC가 발생하는 시점에 무조건 메모리에서 제거된다.
     */
     public void example3_gc() {

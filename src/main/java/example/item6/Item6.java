@@ -45,8 +45,9 @@ public class Item6 {
 }
 
 /*
-*   Item 클래스안에 heavyString 이 매우 무거운 객체라고 가정한다.
-*   heavyString을 static final로 선언하여 한번 생성된 객체를 계속해서 재사용한다.
+*   Item 클래스안에 heavyString이 매우 무거운 객체라고 가정한다.
+*   heavyString은 매우 무거워서 생성하는데 많은 비용이 든다.
+*   프로그램의 성능 저하나 메모리 낭비를 방지하기 위해 heavyString을 static final로 선언하여 한번 생성된 객체를 계속해서 재사용할 수 있다.
 *   만약 아래의 getHeavyString이라는 메서드가 한번도 호출되지 않는다면 heavyString은 쓸데없이 초기화되는 꼴이다.
 *   이 때, 지연 초기화로 불필요한 초기화를 없앨 수는 있지만, 권장되는 방법은 아니라고 한다.(지연 초기화는 코드를 복잡하게 만들고, 성능은 크게 개선되지 않을 때가 많다.)
 */
