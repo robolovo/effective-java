@@ -1,6 +1,5 @@
-package example.item6;
+package example.item06;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

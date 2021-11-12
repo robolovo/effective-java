@@ -1,4 +1,4 @@
-package example.Item9;
+package example.item09;
 
 import java.io.*;
 import java.util.Scanner;
