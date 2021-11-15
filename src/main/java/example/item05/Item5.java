@@ -54,7 +54,7 @@ abstract class Dictionary {
         return "";
     }
 
-    // 생략...
+    // 생략 ...
 }
 
 class OxfordDictionary extends Dictionary {
