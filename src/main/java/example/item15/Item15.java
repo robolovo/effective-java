@@ -65,7 +65,7 @@ class Item {
 
     public void setPrivatePrice(Integer privatePrice) throws PriceLimitException {
         if (privatePrice < 0 || privatePrice > 10000) {
-            throw new PriceLimitException("제한범위를 벗어난 가격입니다.");
+            throw new PriceLimitException("제한범위를 벗어난 가격입니다!");
         }
         this.privatePrice = privatePrice;
     }
