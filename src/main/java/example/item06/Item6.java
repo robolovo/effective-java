@@ -51,7 +51,7 @@ public class Item6 {
 *   이 때, 지연 초기화로 불필요한 초기화를 없앨 수는 있지만, 권장되는 방법은 아니라고 한다.(지연 초기화는 코드를 복잡하게 만들고, 성능은 크게 개선되지 않을 때가 많다.)
 */
 class Item {
-    private static final String heavyString = "Create only once";
+    private static final String heavyString = "Create only once ";
 
     static String getHeavyString() {
         return heavyString;
