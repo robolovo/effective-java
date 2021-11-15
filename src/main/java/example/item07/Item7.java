@@ -58,7 +58,7 @@ public class Item7 {
      *   GC는 언제 작동하는 가
      */
     public String example1_gc() {
-        String topic = "Garbage Collection"; // 토픽이라는 변수가 JVM의 스택에 만들어지고 해당 문자열이 힙 영역에 생성된다.
+        String topic = "Garbage Collection "; // 토픽이라는 변수가 JVM의 스택에 만들어지고 해당 문자열이 힙 영역에 생성된다.
         topic += "is ..."; // String 불변이기 때문에 새로운 문자열이 힙 영역에 생성되고 원래 문자열은 해제되지 않은채로 그대로 남아있게 된다.
                            // 이 때, 기존의 문자열은 unreachable 상태가 되고 GC에 의해서 메모리에서 제거되므로 걱정하지 않아도 된다.
         return topic;
