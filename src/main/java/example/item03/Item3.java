@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 *      싱글턴은 사용하는 클라이언트가 정해져 있지 않다. 싱글턴의 스태틱 메소드를 이용해 언제든지 싱글톤에 쉽게 접글할 수 있기 때문에 애플리케이션 어디서든지 사용될 수 있고,
 *      그러다 보면 자연스럽게 전역 상태로 사용되기 쉽다. 아무 객체나 자유롭게 접근하고 수정하고 공유할 수 있는 전역 상태를 갖는 것은 객체지향 프로그래밍에서는 권장되지 않는다.
 *
-*                                                                                                - 이일민, '토비의 스프링', p.107
+*                                                                                                   - 이일민, '토비의 스프링', p.107
 */
 public class Item3 {
     public static void main(String[] args) {
