@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 *   의존 객체가 변경될 일이 없기 때문에 여러 클라이언트가 의존 객체들을 안심하고 공유할 수 있다.
 *   하지만 이런 의존 객체 주입은 코드를 어지럽게 만들 수 있다.
 *   의존 객체 주입 프레임워크인 스프링의 도움을 받아 어질러짐을 해소할 수 있다.
-*
 */
 public class Item5 {
     @Test
