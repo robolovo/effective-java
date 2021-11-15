@@ -27,7 +27,7 @@ public class Item9 {
 
         /*
          *   try-with-resources
-         *   ⚠️ 이 구조를 사용하려면 해당 자원이 AutoCloseable 인터페이스를 구현해야한다.
+         *   ⚠ 이 구조를 사용하려면 해당 자원이 AutoCloseable 인터페이스를 구현해야한다.
          *      AutoCloseable은 단순히 void를 반환하는 close메소드 하나만 정의해 놓은 인터페이스이다.
          *      닫아야하는 자원을 뜻하는 클래스를 직접 작성한다면 AutoCloseable을 반드시 구현하자.
          */
