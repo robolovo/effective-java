@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.DoubleBinaryOperator;
 
 import static java.util.Comparator.*;
 
@@ -29,10 +30,7 @@ public class Item42 {
         words.add("effective");
         words.add("java");
 
-        /*
-         *   익명 클래스
-         *   낡은 기법이다. 보다시피 한눈에 봐도 깨끗한 코드처럼 보이지는 않는다.
-         */
+        // 익명 클래스
         Collections.sort(words, new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
@@ -40,12 +38,43 @@ public class Item42 {
             }
         });
 
-        /*
-         *   람다
-         */
+        // 람다
         Collections.sort(words, (s1, s2) -> Integer.compare(s1.length(), s2.length()));
+
+        // 비교자 생성 메서드
         Collections.sort(words, comparingInt(String::length));
+
+        // 자바 8부터 List 인터페이스에 추가된 sort 메서드
         words.sort(comparingInt(String::length));
+
+        double plus = Operation.PLUS.apply(1, 10);
+        double minus = Operation.MINUS.apply(1, 10);
+        double times = Operation.TIMES.apply(1, 10);
+        double divide = Operation.DIVIDE.apply(1, 10);
+
+        System.out.println("apply = " + plus);
+        System.out.println("apply = " + minus);
+        System.out.println("apply = " + times);
+        System.out.println("apply = " + divide);
+    }
+}
+
+enum Operation {
+    PLUS ("+", (x, y) -> x + y),
+    MINUS ("-", (x, y) -> x - y),
+    TIMES ("*", (x, y) -> x * y),
+    DIVIDE ("/", (x, y) -> x / y);
+
+    private final String symbol;
+    private final DoubleBinaryOperator op;
+
+    Operation(String symbol, DoubleBinaryOperator op) {
+        this.symbol = symbol;
+        this.op = op;
+    }
+
+    public double apply(double x, double y) {
+        return op.applyAsDouble(x, y);
     }
 }
 
@@ -60,11 +89,9 @@ enum PaymentType {
     KAKAO_PAY("카카오페이", () -> System.out.println("카카오페이 결제를 완료하였습니다.")),
     SAMSUNG_PAY("삼성페이", () -> System.out.println("삼성페이 결제를 완료하였습니다."));
 
-    private final String name;
     private final PaymentProcess paymentProcess;
 
     PaymentType(String name, PaymentProcess paymentProcess) {
-        this.name = name;
         this.paymentProcess = paymentProcess;
     }
 
@@ -76,6 +103,7 @@ enum PaymentType {
 /*
  *   람다를 사용하기 위해 함수형 인터페이스를 만들어준다.
  */
+@FunctionalInterface
 interface PaymentProcess {
     void doPayment();
 }
@@ -83,7 +111,7 @@ interface PaymentProcess {
 /*
  *   테스트 코드
  */
-class PayTest {
+class PayTest01 {
     @Test
     public void payment_test() {
         PaymentType naverPay = PaymentType.NAVER_PAY;
