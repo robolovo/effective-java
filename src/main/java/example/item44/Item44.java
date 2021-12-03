@@ -39,43 +39,44 @@ import java.util.function.*;
 public class Item44 {
 
     public static void main(String[] args) {
-        Map<Integer, String> map = new HashMap<>();
-
-        Map.Entry<Integer, String> entry = new Map.Entry<Integer, String>() {
-            @Override
-            public Integer getKey() {
-                return null;
-            }
-
-            @Override
-            public String getValue() {
-                return null;
-            }
-
-            @Override
-            public String setValue(String value) {
-                return null;
-            }
-        };
+        MyMap<Integer, String> map = new MyMap<>();
 
         map.put(1, "java");
         map.put(2, "python");
         map.put(3, "solidity");
         map.put(4, "javascript");
 
-        boolean result1 = MyLinkedHashMap1.removeEldestEntry(map, entry, (m, e) -> m.size() > 3);
-        System.out.println(result1); // true
-
-        boolean result2 = MyLinkedHashMap2.removeEldestEntry(map, entry, (m, e) -> m.size() > 3);
-        System.out.println(result2); // true
+        map.removeSmallMapEldest();
+        map.removeBigMapEldest();
     }
 }
 
-class MyLinkedHashMap1<K, V> extends HashMap<K, V> implements Map<K, V> {
+class MyMap<K, V> extends MyLinkedHashMapWithStandardFi<K, V> {
+    private static final int SMALL_SIZE = 3;
+    private static final int BIG_SIZE = 100000;
+
+    transient Map.Entry<K, V> head;
+
+    public void removeSmallMapEldest() {
+        Map.Entry<K, V> first = head;
+        if (removeEldestEntry(this, first, (m, e) -> m.size() > SMALL_SIZE)) {
+            System.out.println(this.size());
+        }
+    }
+
+    public void removeBigMapEldest() {
+        Map.Entry<K, V> first = head;
+        if (removeEldestEntry(this, first, (m, e) -> m.size() > BIG_SIZE)) {
+            System.out.println(this.size());
+        }
+    }
+}
+
+class MyLinkedHashMapWithStandardFi<K, V> extends HashMap<K, V> {
     // ...
 
     // 자바 표준 함수형 인터페이스인 BiPredicate를 사용한다.
-    public static <T, U> boolean removeEldestEntry(
+    protected <T, U> boolean removeEldestEntry(
             Map<T, U> map,
             Map.Entry<T, U> eldest,
             BiPredicate<? super Map<T, U>, ? super Map.Entry<T, U>> bp
@@ -87,18 +88,18 @@ class MyLinkedHashMap1<K, V> extends HashMap<K, V> implements Map<K, V> {
 }
 
 @FunctionalInterface  // 직접 작성한 함수형 인터페이스
-interface EldestEntryRemovalFunction<K, V> {
-    boolean remove(Map<K, V> map, Map.Entry<K, V> eldest);
+interface EldestEntryRemovalFunction<T, U> {
+    boolean remove(Map<T, U> map, Map.Entry<T, U> eldest);
 }
 
-class MyLinkedHashMap2<K, V> extends HashMap<K, V> implements Map<K, V> {
+class MyLinkedHashMapWithCustomFi<K, V> extends HashMap<K, V> implements Map<K, V> {
     // ...
 
     /*
      *  직접 작성한 함수형 인터페이스인 EldestEntryRemovalFunction을 사용한다.
      *  별 다른 이유가 없으면 표준 함수형 인터페이스를 사용하여 장점을 누리자.
      */
-    public static <T, U> boolean removeEldestEntry(
+    protected <T, U> boolean removeEldestEntry(
             Map<T, U> map,
             Map.Entry<T, U> eldest,
             EldestEntryRemovalFunction<T, U> f
