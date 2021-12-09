@@ -1,0 +1,14 @@
+java effective
+java spring
+java stream
+java lambda
+
+python effective
+python django
+python flask
+python fastAPI
+
+javascript effective
+javascript node
+javascript express
+javascript nest
