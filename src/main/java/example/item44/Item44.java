@@ -38,75 +38,75 @@ import java.util.function.*;
  */
 public class Item44 {
 
+    public static class SizedMap<K, V> extends LinkedHashMap<K, V> {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+            return size() > 2;
+        }
+    }
+
     public static void main(String[] args) {
-        MyMap<Integer, String> map = new MyMap<>();
-
-        map.put(1, "java");
-        map.put(2, "python");
-        map.put(3, "solidity");
-        map.put(4, "javascript");
-
-        map.removeSmallMapEldest();
-        map.removeBigMapEldest();
-    }
-}
-
-class MyMap<K, V> extends MyLinkedHashMapWithStandardFi<K, V> {
-    private static final int SMALL_SIZE = 3;
-    private static final int BIG_SIZE = 100000;
-
-    transient Map.Entry<K, V> head;
-
-    public void removeSmallMapEldest() {
-        Map.Entry<K, V> first = head;
-        if (removeEldestEntry(this, first, (m, e) -> m.size() > SMALL_SIZE)) {
-            System.out.println(this.size());
+        // 오버라이딩
+        SizedMap<String, Integer> sizedMap = new SizedMap<>();
+        for (int i = 0; i < 7; i++) {
+            sizedMap.put("a", i);
         }
-    }
+        System.out.println(sizedMap.size()); // 2
 
-    public void removeBigMapEldest() {
-        Map.Entry<K, V> first = head;
-        if (removeEldestEntry(this, first, (m, e) -> m.size() > BIG_SIZE)) {
-            System.out.println(this.size());
+
+        // 직접 만든 함수형 인터페이스
+        MyLinkedHashMap<String, Integer> customFunctionalMap =
+                new MyLinkedHashMap<>((map, eldest) -> map.size() > 3);
+        for (int i = 0; i < 7; i++) {
+            customFunctionalMap.put("a", i);
         }
+        System.out.println(customFunctionalMap.size()); // 3
+
+
+        // 표준 함수형 인터페이스
+        MyLinkedHashMap<String, Integer> standardFunctionalMap =
+                new MyLinkedHashMap<>((map, eldest) -> map.size() > 4);
+        for (int i = 0; i < 7; i++) {
+            standardFunctionalMap.put("a", i);
+        }
+        System.out.println(standardFunctionalMap.size()); // 4
     }
 }
 
-class MyLinkedHashMapWithStandardFi<K, V> extends HashMap<K, V> {
-    // ...
+/*
+ *  책에서 권고하는 표준 함수형 인터페이스를 이용해 구현해 보았다.
+ */
+class MyLinkedHashMap<K, V> extends LinkedHashMap<K, V> {
+    private final BiPredicate<Map<K, V>, Map.Entry<K, V>> bp;
 
-    // 자바 표준 함수형 인터페이스인 BiPredicate를 사용한다.
-    protected <T, U> boolean removeEldestEntry(
-            Map<T, U> map,
-            Map.Entry<T, U> eldest,
-            BiPredicate<? super Map<T, U>, ? super Map.Entry<T, U>> bp
-    ) {
-        return bp.test(map, eldest);
+    MyLinkedHashMap(BiPredicate<Map<K, V>, Map.Entry<K, V>> bp) {
+        this.bp = bp;
     }
 
-    // ...
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+        return bp.test(this, eldest);
+    }
 }
 
-@FunctionalInterface  // 직접 작성한 함수형 인터페이스
+/*
+ *  직접 작성한 함수형 인터페이스를 이용해 구현해 보았다.
+ */
+@FunctionalInterface
 interface EldestEntryRemovalFunction<T, U> {
     boolean remove(Map<T, U> map, Map.Entry<T, U> eldest);
 }
 
-class MyLinkedHashMapWithCustomFi<K, V> extends HashMap<K, V> implements Map<K, V> {
-    // ...
+class MyLinkedHashMapV1<K, V> extends LinkedHashMap<K, V> {
+    private EldestEntryRemovalFunction<K, V> ef;
 
-    /*
-     *  직접 작성한 함수형 인터페이스인 EldestEntryRemovalFunction을 사용한다.
-     *  별 다른 이유가 없으면 표준 함수형 인터페이스를 사용하여 장점을 누리자.
-     */
-    protected <T, U> boolean removeEldestEntry(
-            Map<T, U> map,
-            Map.Entry<T, U> eldest,
-            EldestEntryRemovalFunction<T, U> f
-    ) {
-        return f.remove(map, eldest);
+    public MyLinkedHashMapV1(EldestEntryRemovalFunction<K, V> ef) {
+        this.ef = ef;
     }
 
-    // ...
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+        return ef.remove(this, eldest);
+    }
 }
 
