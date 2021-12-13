@@ -1,5 +1,6 @@
 package example.item44;
 
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.*;
 
@@ -41,33 +42,32 @@ public class Item44 {
     public static class SizedMap<K, V> extends LinkedHashMap<K, V> {
         @Override
         protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-            return size() > 2;
+            return size() > 100;
         }
     }
 
     public static void main(String[] args) {
         // 오버라이딩
-        SizedMap<String, Integer> sizedMap = new SizedMap<>();
-        for (int i = 0; i < 7; i++) {
-            sizedMap.put("a", i);
+        SizedMap<Integer, Integer> sizedMap = new SizedMap<>();
+        for (int i = 0; i < 1000; i++) {
+            sizedMap.put(i, i);
         }
-        System.out.println(sizedMap.size()); // 2
-
+        System.out.println(sizedMap.size()); // 5
 
         // 직접 만든 함수형 인터페이스
-        MyLinkedHashMap<String, Integer> customFunctionalMap =
-                new MyLinkedHashMap<>((map, eldest) -> map.size() > 3);
-        for (int i = 0; i < 7; i++) {
-            customFunctionalMap.put("a", i);
+        MyLinkedHashMap<Integer, Integer> customFunctionalMap =
+                new MyLinkedHashMap<>((map, eldest) -> map.size() > 100);
+        for (int i = 0; i < 1000; i++) {
+            customFunctionalMap.put(i, i);
         }
         System.out.println(customFunctionalMap.size()); // 3
 
 
         // 표준 함수형 인터페이스
-        MyLinkedHashMap<String, Integer> standardFunctionalMap =
-                new MyLinkedHashMap<>((map, eldest) -> map.size() > 4);
-        for (int i = 0; i < 7; i++) {
-            standardFunctionalMap.put("a", i);
+        MyLinkedHashMap<Integer, Integer> standardFunctionalMap =
+                new MyLinkedHashMap<>((map, eldest) -> map.size() > 100);
+        for (int i = 0; i < 1000; i++) {
+            standardFunctionalMap.put(i, i);
         }
         System.out.println(standardFunctionalMap.size()); // 4
     }
@@ -98,7 +98,7 @@ interface EldestEntryRemovalFunction<T, U> {
 }
 
 class MyLinkedHashMapV1<K, V> extends LinkedHashMap<K, V> {
-    private EldestEntryRemovalFunction<K, V> ef;
+    private final EldestEntryRemovalFunction<K, V> ef;
 
     public MyLinkedHashMapV1(EldestEntryRemovalFunction<K, V> ef) {
         this.ef = ef;
